@@ -10,16 +10,30 @@ module.exports = function(config) {
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
   config.set({
-    // 1. Frameworks
-    frameworks: ['browserify', 'mocha'],
+    frameworks: ['ui5', 'browserify', 'mocha'], // Added 'ui5' framework
 
-    // 2. Files - Double check if your folder is 'test' or 'webapp/test'
+    ui5: {
+        url: "https://sapui5.hana.ondemand.com",
+        mode: "script", // Best for OPA5/Unit tests in CI
+        config: {
+            async: true,
+            resourceRoots: {
+                "ns.HTML5Module": "./webapp" // Matches your namespace in Startup.js
+            }
+        },
+        tests: [
+            "ns/HTML5Module/test/unit/AllTests",
+            "ns/HTML5Module/test/integration/AllJourneys"
+        ]
+    },
+
     files: [
-      'test/**/*.js' 
+        { pattern: 'webapp/**', served: true, included: false, watched: true }
     ],
 
     preprocessors: {
-      'test/**/*.js': ['browserify']
+        // Use coverage on the actual source code, not the tests
+        'webapp/**/*.js': ['coverage']
     },
 
     // 3. Simplified Reporters (Removed sonarqubeUnit temporarily to stop the crash)
