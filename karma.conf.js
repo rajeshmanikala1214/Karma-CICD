@@ -31,17 +31,22 @@ module.exports = function(config) {
 
     browsers: ['SeleniumChrome'],
 
+    hostname: '0.0.0.0', 
+    listenAddress: '0.0.0.0',
+
     customLaunchers: {
       SeleniumChrome: {
         base: 'WebDriver',
         config: {
           hostname: process.env.PIPER_SELENIUM_WEBDRIVER_HOSTNAME || 'selenium',
-          port: parseInt(process.env.PIPER_SELENIUM_WEBDRIVER_PORT) || 4444
+          port: 4444
         },
-        browserName: 'chrome'
+        browserName: 'chrome',
+        name: 'Karma test'
       }
     },
 
+    protocol: 'http:',
     singleRun: true,
 
      plugins: [
