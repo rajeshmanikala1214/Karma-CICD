@@ -12,41 +12,43 @@ module.exports = function(config) {
       "{webapp,webapp/!(test)}/!(mock*).js": ["coverage"]
     },
 
-    reporters: ["progress", "junit", "coverage"],
-
-    junitReporter: {
-      outputDir: "reports",
-      outputFile: "TESTS-karma.xml",
-      useBrowserName: false
-    },
+    reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
-      dir: "coverage",
+      dir: 'reports',
       reporters: [
-        { type: "lcov", subdir: "." },
-        { type: "text-summary" }
+        { type: 'cobertura', subdir: 'coverage', file: 'coverage.xml' },
+        { type: 'lcov', subdir: 'coverage' },
+        { type: 'text-summary' }
       ]
     },
 
-    // ✅ USE SELENIUM CHROME (NOT LOCAL CHROMIUM)
-    browsers: ["ChromeHeadless"],
+    junitReporter: {
+      outputDir: 'reports',
+      outputFile: 'TESTS-karma.xml',
+      useBrowserName: false
+    },
+
+    browsers: ['SeleniumChrome'],
 
     customLaunchers: {
-      ChromeHeadless: {
-        base: "Chrome",
-        flags: [
-          "--no-sandbox",
-          "--disable-setuid-sandbox",
-          "--disable-dev-shm-usage",
-          "--disable-gpu"
-        ]
+      SeleniumChrome: {
+        base: 'WebDriver',
+        config: {
+          hostname: process.env.PIPER_SELENIUM_WEBDRIVER_HOSTNAME || 'selenium',
+          port: parseInt(process.env.PIPER_SELENIUM_WEBDRIVER_PORT) || 4444
+        },
+        browserName: 'chrome'
       }
     },
 
-    browserConsoleLogOptions: {
-      level: "error"
-    },
+    singleRun: true,
 
-    singleRun: true
+    plugins: [
+      'karma-ui5',
+      'karma-junit-reporter',
+      'karma-coverage',
+      'karma-webdriver-launcher'
+    ]
   });
 };
