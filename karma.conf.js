@@ -1,69 +1,52 @@
 module.exports = function(config) {
-	"use strict";
+  "use strict";
 
-	config.set({
-        frameworks: ["ui5"],
-		ui5: {
-			url: "https://sapui5.hana.ondemand.com"
-		},
-		preprocessors: {
-			"{webapp,webapp/!(test)}/!(mock*).js": ["coverage"]
-		},
-		coverageReporter: {
-			includeAllSources: true,
-			reporters: [
-				{
-					type: "html",
-					dir: "coverage"
-				},
-				{
-					type: "text"
-				}
-			],
-			check: {
-  each: {
-    statements: 50,
-    branches: 50,
-    functions: 50,
-    lines: 50
-  }
-}
-		},
-		reporters: ["progress", "junit", "coverage"],
+  config.set({
+    frameworks: ["ui5"],
 
-junitReporter: {
-  outputDir: "reports",
-  outputFile: "TESTS-karma.xml",
-  useBrowserName: false
-},
+    ui5: {
+      url: "https://sapui5.hana.ondemand.com"
+    },
 
-coverageReporter: {
-  dir: "coverage",
-  reporters: [
-    { type: "lcov", subdir: "." },
-    { type: "text-summary" }
-  ]
-},
-        // 🔥 CHANGE HERE
-        browsers: ["ChromiumHeadlessNoSandbox"],
+    preprocessors: {
+      "{webapp,webapp/!(test)}/!(mock*).js": ["coverage"]
+    },
 
-        // 🔥 ADD THIS BLOCK
-        customLaunchers: {
-            ChromiumHeadlessNoSandbox: {
-                base: "ChromiumHeadless",
-                flags: [
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--disable-gpu"
-                ]
-            }
-        },
+    reporters: ["progress", "junit", "coverage"],
 
-        browserConsoleLogOptions: {
-			level: "error"
-        },
+    junitReporter: {
+      outputDir: "reports",
+      outputFile: "TESTS-karma.xml",
+      useBrowserName: false
+    },
 
-		singleRun: true
-	});
+    coverageReporter: {
+      dir: "coverage",
+      reporters: [
+        { type: "lcov", subdir: "." },
+        { type: "text-summary" }
+      ]
+    },
+
+    // ✅ USE SELENIUM CHROME (NOT LOCAL CHROMIUM)
+    browsers: ["ChromeHeadless"],
+
+    customLaunchers: {
+      ChromeHeadless: {
+        base: "Chrome",
+        flags: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-gpu"
+        ]
+      }
+    },
+
+    browserConsoleLogOptions: {
+      level: "error"
+    },
+
+    singleRun: true
+  });
 };
