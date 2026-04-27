@@ -3,31 +3,27 @@ const os = require('os');
 module.exports = function(config) {
   "use strict";
 
-  // Get internal IP so Selenium sidecar can reach this container
+  // Dynamic IP detection for Selenium Sidecar
   const networkInterfaces = os.networkInterfaces();
   const containerIp = Object.values(networkInterfaces)
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
   config.set({
+    // 1. Frameworks
     frameworks: ['browserify', 'mocha'],
-    
-    ui5: {
-      url: "https://sapui5.hana.ondemand.com"
-    },
 
-    // Ensure these paths actually exist in your repository!
+    // 2. Files - Double check if your folder is 'test' or 'webapp/test'
     files: [
       'test/**/*.js' 
     ],
 
     preprocessors: {
-      // If you are using UI5, coverage usually targets the webapp folder
-      "webapp/**/*.js": ["coverage"],
-      "test/**/*.js": ["browserify"]
+      'test/**/*.js': ['browserify']
     },
 
-    reporters: ['progress', 'coverage', 'junit', 'sonarqubeUnit'],
+    // 3. Simplified Reporters (Removed sonarqubeUnit temporarily to stop the crash)
+    reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
       dir: 'reports',
@@ -45,21 +41,13 @@ module.exports = function(config) {
       suite: 'KarmaTests'
     },
 
-    sonarQubeUnitReporter: {
-      sonarQubeVersion: 'LATEST',
-      outputFile: 'reports/test-execution.xml',
-      overrideTestDescription: true,
-      testPaths: ['test'],
-      testFilePattern: '.js', // Matches your files pattern
-      useBrowserName: false
-    },
-
+    // 4. Networking
     port: 9876,
-    hostname: containerIp, // Use detected IP
+    hostname: containerIp,
     listenAddress: '0.0.0.0',
      
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG, // Increased log level to see more details
     autoWatch: false,
     singleRun: true,
 
@@ -83,18 +71,14 @@ module.exports = function(config) {
     browserDisconnectTimeout: 210000,
     browserDisconnectTolerance: 3,
     browserNoActivityTimeout: 210000,
-    reportSlowerThan: 500,
 
     plugins: [
-      'karma-ui5', 
       'karma-mocha',
       'karma-chrome-launcher',
-      'karma-firefox-launcher',
       'karma-junit-reporter',
       'karma-browserify',
       'karma-coverage',
-      'karma-webdriver-launcher',
-      'karma-sonarqube-unit-reporter'  
+      'karma-webdriver-launcher'
     ],
     
     concurrency: 1,
