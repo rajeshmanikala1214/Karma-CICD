@@ -77,7 +77,8 @@ module.exports = function(config) {
       'karma-junit-reporter',
       'karma-browserify',
       'karma-coverage',
-      'karma-webdriver-launcher'
+      'karma-webdriver-launcher',
+      'karma-sonarqube-unit-reporter'  
     ],
     
     concurrency: 1,
