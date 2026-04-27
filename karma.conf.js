@@ -7,6 +7,10 @@ module.exports = function(config) {
       url: "https://sapui5.hana.ondemand.com"
     },
 
+     files: [
+      'test/integration/*.js',
+      'test/unit/*.js'
+    ],
     preprocessors: {
       "{webapp,webapp/!(test)}/!(mock*).js": ["coverage"]
     },
@@ -34,7 +38,7 @@ module.exports = function(config) {
       sonarQubeVersion: 'LATEST',
       outputFile: 'reports/test-execution.xml',
       overrideTestDescription: true,
-      testPaths: ['test/client'],
+      testPaths: ['test'],
       testFilePattern: '.spec.js',
       useBrowserName: false
     },
