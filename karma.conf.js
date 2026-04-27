@@ -8,11 +8,13 @@ module.exports = function(config) {
     },
 
      files: [
-      'test/integration/*.js',
-      'test/unit/*.js'
+      'test/**/*.js' 
     ],
+
     preprocessors: {
-      "{webapp,webapp/!(test)}/!(mock*).js": ["coverage"]
+      // If you are using UI5, coverage usually targets the webapp folder
+      "webapp/**/*.js": ["coverage"],
+      "test/**/*.js": ["browserify"]
     },
 
     reporters: ['progress', 'coverage', 'junit', 'sonarqubeUnit'],
@@ -39,7 +41,7 @@ module.exports = function(config) {
       outputFile: 'reports/test-execution.xml',
       overrideTestDescription: true,
       testPaths: ['test'],
-      testFilePattern: '.spec.js',
+      testFilePattern: '.js', 
       useBrowserName: false
     },
 
