@@ -18,8 +18,8 @@ module.exports = function(config) {
       config: {
         async: true,
         resourceRoots: {
-          "ns.HTML5Module": "./webapp" 
-        }
+        "ns.HTML5Module": "/base/webapp"
+      }
       },
       // Point to the specific "All" files you shared
       tests: [
